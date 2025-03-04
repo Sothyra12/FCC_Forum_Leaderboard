@@ -9,9 +9,24 @@ const avatarUrl = "https://sea1.discourse-cdn.com/freecodecamp";
 const postsContainer = document.getElementById("posts-container");
 
 const allCategories = {
-  299: {
-    category: "Career Advice",
-    className: "career",
+  299: { category: "Career Advice", className: "career" },
+  409: { category: "Project Feedback", className: "feedback" },
+  417: { category: "freeCodeCamp Support", className: "support" },
+  421: { category: "JavaScript", className: "javascript" },
+  423: { category: "HTML - CSS", className: "html-css" },
+  424: { category: "Python", className: "python" },
+  432: { category: "You Can Do This!", className: "motivation" },
+  560: { category: "Backend Development", className: "backend" },
+};
+
+const forumCategory = (id) => {
+  let selectedCategory = {};
+
+  if (allCategories.hasOwnProperty(id)) {
+    const { className, category } = allCategories[id];
+    
+    selectedCategory.className = className;
+    selectedCategory.category = category;
   }
 };
 
@@ -38,7 +53,7 @@ const timeAgo = (time) => {
 };
 
 const viewCount = (views) => {
-  return views = views >= 1000 ? `${Math.floor(views / 1000)}k` : views;
+  return (views = views >= 1000 ? `${Math.floor(views / 1000)}k` : views);
 };
 
 // To populate the forum leaderboard with data, you will need to request the data from an API.
