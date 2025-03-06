@@ -24,7 +24,7 @@ const forumCategory = (id) => {
 
   if (allCategories.hasOwnProperty(id)) {
     const { className, category } = allCategories[id];
-    
+
     selectedCategory.className = className;
     selectedCategory.category = category;
   } else {
@@ -32,6 +32,12 @@ const forumCategory = (id) => {
     selectedCategory.category = "General";
     selectedCategory.id = 1;
   }
+
+  const url = `${forumCategoryUrl}${selectedCategory.className}/${id}`;
+  const linkText = selectedCategory.category;
+  const linkClass = `category ${selectedCategory.className}`;
+
+  return `<a href="${url}" class="${linkClass}" target="_blank">${linkText}</a>`;
 };
 
 const timeAgo = (time) => {
@@ -58,6 +64,22 @@ const timeAgo = (time) => {
 
 const viewCount = (views) => {
   return (views = views >= 1000 ? `${Math.floor(views / 1000)}k` : views);
+};
+
+const avatars = (posters, users) => {
+  return posters
+    .map((poster) => {
+      const user = users.find((user) => user.id === poster.user_id);
+
+      if (user) {
+        const avatar = user.avatar_template.replace(/{size}/, 30);
+        const userAvatarUrl = avatar.startsWith("/user_avatar/")
+          ? avatarUrl.concat(avatar)
+          : avatar;
+        return `<img src="${userAvatarUrl}" alt="${user.name}"/>`;
+      }
+    })
+    .join("");
 };
 
 // To populate the forum leaderboard with data, you will need to request the data from an API.
@@ -110,9 +132,14 @@ const showLatestPosts = (data) => {
       return `
     <tr>
       <td>
-        <p class="post_title">${title}</p>
+         <a href="${forumTopicUrl}${slug}/${id}" class="post-title" target="_blank">${title}</a>
+         ${forumCategory(category_id)}
       </td>
-      <td></td>
+      <td>
+        <div class="avatar-container">
+          ${avatars(posters, users)}
+        </div>
+      </td>
       <td>
         ${posts_count - 1}.
       </td>
